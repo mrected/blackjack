@@ -59,8 +59,9 @@ const dealersTurn = () => {
     addCardToInterface(card, dealerInterface)
     dealerScore.textContent = getScore(dealerHand)
   } else {
+    console.log('game over')
     gamePlaying = gamePlaying[(false, false)]
-    winner()
+    // winner()
   }
 }
 
@@ -83,9 +84,10 @@ const winner = () => {
 // Utilities -----------------------------------------------------
 
 const addCardToInterface = (card, hand) => {
-  let newCard = `The ${card.face} of ${card.suit}`
+  // let newCard = `The ${card.face} of ${card.suit}`
+  let newCard = `<img src="images/cards/${card.face}_of_${card.suit}.svg" />`
   let newLi = document.createElement('li')
-  newLi.textContent = newCard
+  newLi.innerHTML = newCard
   hand.appendChild(newLi)
 }
 
