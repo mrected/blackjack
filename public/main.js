@@ -1,6 +1,6 @@
 // Variables -----------------------------------------------------
 
-let gamePlaying = [true, true]
+let gamePlaying = true
 let deck = []
 let playerHand = []
 let dealerHand = []
@@ -12,13 +12,10 @@ const dealerScore = document.querySelector('.dealer-score')
 const playerScore = document.querySelector('.player-score')
 const winnerIndicator = document.querySelector('.winner-indicator')
 
-// Events -----------------------------------------------------
+// Buttons -----------------------------------------------------
 
 stayButton.addEventListener('click', () => {
-  if (gamePlaying[1]) {
-    dealerHand.forEach(card => {
-      addCardToInterface(card, dealerInterface)
-    })
+  if (gamePlaying) {
     playerScore.textContent = getScore(playerHand)
     dealerScore.textContent = getScore(dealerHand)
     dealersTurn()
@@ -26,12 +23,12 @@ stayButton.addEventListener('click', () => {
 })
 
 hitButton.addEventListener('click', () => {
-  if (gamePlaying[0]) {
+  if (gamePlaying) {
     let card = deck.pop()
     playerHand.push(card)
     addCardToInterface(card, playerInterface)
     if (getScore(playerHand) > 21) {
-      gamePlaying[0] = false
+      winnerIndicator.textContent = rules()
     }
     playerScore.textContent = getScore(playerHand)
   }
@@ -53,38 +50,36 @@ const startGame = () => {
 }
 
 const dealersTurn = () => {
-  if (getScore(dealerHand) < 17) {
+  while (getScore(dealerHand) < 17) {
     let card = deck.pop()
     dealerHand.push(card)
-    addCardToInterface(card, dealerInterface)
     dealerScore.textContent = getScore(dealerHand)
-  } else {
-    console.log('game over')
-    gamePlaying = gamePlaying[(false, false)]
-    // winner()
   }
+  winnerIndicator.textContent = rules()
 }
 
-const winner = () => {
-  if (
-    getScore(playerHand) === getScore(dealerHand) &&
-    getScore(playerHand) > 21
-  ) {
-    winnerIndicator.textContent = 'Draw'
-  } else if (
-    getScore(playerHand) > getScore(dealerHand) &&
-    getScore(playerHand) < 21
-  ) {
-    winnerIndicator.textContent = 'Player'
-  } else {
-    winnerIndicator.textContent = 'Dealer'
+const rules = () => {
+  let player = getScore(playerHand)
+  let dealer = getScore(dealerHand)
+  if (gamePlaying) {
+    gamePlaying = false
+    dealerHand.forEach(card => addCardToInterface(card, dealerInterface))
+    if (player > 21) {
+      dealerScore.textContent = getScore(dealerHand)
+      return 'player busts'
+    } else if (dealer > 21) {
+      return 'dealer busts'
+    } else if (player === dealer) {
+      return 'draw'
+    } else {
+      return player > dealer ? 'player wins' : 'dealer wins'
+    }
   }
 }
 
 // Utilities -----------------------------------------------------
 
 const addCardToInterface = (card, hand) => {
-  // let newCard = `The ${card.face} of ${card.suit}`
   let newCard = `<img src="images/cards/${card.face}_of_${card.suit}.svg" />`
   let newLi = document.createElement('li')
   newLi.innerHTML = newCard
@@ -98,6 +93,8 @@ const getScore = cards => {
   })
   return tempScoreArray.reduce((score, currentValue) => score + currentValue)
 }
+
+// The Deck -----------------------------------------------------
 
 const main = () => {
   let suits = ['spades', 'hearts', 'clubs', 'diamonds']
@@ -177,24 +174,5 @@ const main = () => {
 
   startGame()
 }
-
-// for (let index = 52 - 1; index > 1; index -= 1) {
-//   let otherIndex = Math.floor(Math.random() * index)
-//   let firstCard = deck[index]
-//   let secondCard = deck[otherIndex]​
-//   deck[index] = secondCard
-//   deck[otherIndex] = firstCard
-// }​
-
-// BLACKJACK
-// game starts by dealing 2 cards to the dealer, then 2 to the player - done
-// dealers cards aren't shown, players cards are - done
-// player has a hit button that when pressed adds 1 card -done
-// if player score goes over 21, player loses - done
-// player has a stand button, when pressed dealers cards are revealed - done
-// and cards are added until the value is 17 or more - done
-// if dealers cards are more than 21 or less than players the player wins - done
-// else dealer wins - done
-// play again button rebuilds and shuffles deck, sets scores to 0 and deals again
 
 document.addEventListener('DOMContentLoaded', main)

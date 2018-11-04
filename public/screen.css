@@ -7,3 +7,17 @@ body {
   min-height: 100%;
   font: 16px / 1 sans-serif;
 }
+
+ul {
+  display: flex;
+  height: 180px;
+  list-style: none
+}
+
+li {
+  width: 20px;
+}
+
+li img {
+  height: 150px;
+}
