@@ -8,6 +8,7 @@ const dealerInterface = document.querySelector('.dealer-hand')
 const playerInterface = document.querySelector('.player-hand')
 const hitButton = document.querySelector('.hit-button')
 const stayButton = document.querySelector('.stay-button')
+const resetButton = document.querySelector('.reset-button')
 const dealerScore = document.querySelector('.dealer-score')
 const playerScore = document.querySelector('.player-score')
 const winnerIndicator = document.querySelector('.winner-indicator')
@@ -34,6 +35,20 @@ hitButton.addEventListener('click', () => {
   }
 })
 
+resetButton.addEventListener('click', () => {
+  if (gamePlaying === false) {
+    gamePlaying = true
+    deck = []
+    playerHand = []
+    dealerHand = []
+    dealerInterface.innerHTML = ''
+    playerInterface.innerHTML = ''
+    dealerScore.textContent = ''
+    playerScore.textContent = ''
+    winnerIndicator.textContent = ''
+    main()
+  }
+})
 // Game Play -----------------------------------------------------
 
 const startGame = () => {
